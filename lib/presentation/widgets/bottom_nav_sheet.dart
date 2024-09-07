@@ -1,5 +1,7 @@
+import 'package:duplicate_payuung_pribadi/config/constants.dart';
 import 'package:duplicate_payuung_pribadi/presentation/controller/bottom_nav_sheet_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
 
 class BottomNavSheet extends GetWidget<BottomNavSheetController> {
@@ -8,28 +10,85 @@ class BottomNavSheet extends GetWidget<BottomNavSheetController> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisSize: MainAxisSize.min,
+      verticalDirection: VerticalDirection.up,
       children: [
+        _buildNavSheet(),
         _buildArrowTrigger(),
-        Obx(() => controller.isExpanded
-            ? _buildExpandedSheet()
-            : _buildBottomNavBar())
       ],
+    );
+  }
+
+  GestureDetector _buildNavSheet() {
+    return GestureDetector(
+        onVerticalDragUpdate: (details) {
+          controller
+              .updateSheetHeight(controller.sheetHeight - details.delta.dy);
+        },
+        onVerticalDragEnd: (_) {
+          if (controller.sheetHeight > 128) {
+            controller.updateSheetHeight(300);
+          } else {
+            controller.updateSheetHeight(0);
+          }
+        },
+        child: Obx(
+          () => AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            height:
+                controller.sheetHeight == 0 ? 128 : controller.sheetHeight,
+            width: double.infinity,
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(32),
+              ),
+              boxShadow: [
+                _buildShadow(),
+              ],
+            ),
+            child: _buildGridSheet(),
+          ),
+        ),
+      );
+  }
+
+  BoxShadow _buildShadow() {
+    return BoxShadow(
+      color: Colors.grey.withOpacity(0.5),
+      offset: const Offset(0, -1),
+      blurRadius: 0,
+      spreadRadius: 1,
     );
   }
 
   Widget _buildArrowTrigger() {
     return GestureDetector(
-      onTap: controller.toggleExpanded,
+      onTap: () {
+        controller.updateSheetHeight(controller.sheetHeight == 0 ? 300 : 0);
+      },
       child: Container(
         height: 20,
-        color: Colors.white,
+        width: 48,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            _buildShadow(),
+          ],
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(32),
+            topRight: Radius.circular(32),
+          ),
+        ),
         child: Center(
           child: Obx(
-            () => AnimatedRotation(
-              turns: controller.isExpanded ? 0.5 : 0,
-              duration: const Duration(milliseconds: 300),
-              child: Icon(Icons.keyboard_arrow_up, color: Colors.grey[600]),
+            () => Icon(
+              controller.sheetHeight == 0
+                  ? FeatherIcons.chevronUp
+                  : FeatherIcons.chevronDown,
+              color: Colors.grey[600],
+              size: 32,
             ),
           ),
         ),
@@ -37,86 +96,83 @@ class BottomNavSheet extends GetWidget<BottomNavSheetController> {
     );
   }
 
-  Widget _buildBottomNavBar() {
-    return Obx(
-      () => BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Beranda',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Cari',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Keranjang',
-          ),
-        ],
-        currentIndex: controller.selectedIndex,
-        onTap: controller.setSelectedIndex,
-      ),
-    );
-  }
-
-  Widget _buildExpandedSheet() {
+  Widget _buildGridSheet() {
     final List<Map<String, dynamic>> items = [
       {
-        'icon': Icons.home,
+        'icon': FeatherIcons.home,
         'label': 'Beranda',
-        'onTap': () => controller.setSelectedIndex(0)
       },
       {
-        'icon': Icons.search,
+        'icon': FeatherIcons.search,
         'label': 'Cari',
-        'onTap': () => controller.setSelectedIndex(1)
       },
       {
-        'icon': Icons.shopping_cart,
+        'icon': FeatherIcons.shoppingCart,
         'label': 'Keranjang',
-        'onTap': () => controller.setSelectedIndex(2)
       },
-      {'icon': Icons.receipt, 'label': 'Daftar Transaksi', 'onTap': () {}},
-      {'icon': Icons.card_giftcard, 'label': 'Voucher Saya', 'onTap': () {}},
-      {'icon': Icons.location_on, 'label': 'Alamat Pengiriman', 'onTap': () {}},
-      {'icon': Icons.people, 'label': 'Daftar Teman', 'onTap': () {}},
-      {'icon': Icons.account_circle, 'label': 'Profil', 'onTap': () {}},
+      {
+        'icon': FeatherIcons.clipboard,
+        'label': 'Daftar Transaksi',
+      },
+      {
+        'icon': FeatherIcons.creditCard,
+        'label': 'Voucher Saya',
+      },
+      {
+        'icon': FeatherIcons.mapPin,
+        'label': 'Alamat Pengiriman',
+      },
+      {
+        'icon': FeatherIcons.users,
+        'label': 'Daftar Teman',
+      },
     ];
 
-    return SizedBox(
-      height: 300,
-      child: GridView.builder(
-        padding: const EdgeInsets.all(16),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          childAspectRatio: 1,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-        ),
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          return _buildGridItem(items[index]);
-        },
+    return GridView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        childAspectRatio: 2,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+        mainAxisExtent: 72,
       ),
+      itemCount: items.length,
+      itemBuilder: (context, index) => _buildGridItem(items[index], index),
     );
   }
 
-  Widget _buildGridItem(Map<String, dynamic> item) {
-    return InkWell(
-      onTap: item['onTap'],
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(item['icon'], size: 32, color: Colors.blue),
-          const SizedBox(height: 8),
-          Text(
-            item['label'],
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 12),
+  Widget _buildGridItem(Map<String, dynamic> item, int index) {
+    return Obx(() {
+      return GestureDetector(
+        onTap: () => controller.setSelectedIndex(index),
+        child: SizedBox(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                item['icon'],
+                size: 32,
+                color: controller.selectedIndex == index
+                    ? Constants.primaryColor
+                    : Colors.grey,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                item['label'],
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: controller.selectedIndex == index
+                        ? Constants.primaryColor
+                        : Colors.grey),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        ),
+      );
+    });
   }
 }

@@ -13,8 +13,17 @@ class MainPage extends GetView<BottomNavSheetController> {
         appBar: AppBar(
           title: const Text('Main Page'),
         ),
-        body: controller.currentScreen,
-        bottomNavigationBar: const BottomNavSheet(),
+        body: Stack(
+          children: [
+            controller.currentScreen,
+            const Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: BottomNavSheet(),
+            ),
+          ],
+        ),
       );
     });
   }
