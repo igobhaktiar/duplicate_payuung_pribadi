@@ -1,3 +1,4 @@
+import 'package:duplicate_payuung_pribadi/presentation/widgets/explore_wellness_widget.dart';
 import 'package:flutter/material.dart';
 
 class PersonalMenuView extends StatelessWidget {
@@ -5,6 +6,15 @@ class PersonalMenuView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Column(
+      children: [
+        _buildMenuOptions(),
+        const ExploreWellnessWidget(),
+      ],
+    );
+  }
+
+  Widget _buildMenuOptions() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -23,9 +33,12 @@ class PersonalMenuView extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           children: [
             _buildMenuItem(Icons.group, 'Urun', Colors.brown, isNew: true),
-            _buildMenuItem(Icons.mosque, 'Pembiayaan\nPorsi Haji', Colors.green),
-            _buildMenuItem(Icons.insert_chart, 'Financial\nCheck Up', Colors.blue),
-            _buildMenuItem(Icons.directions_car, 'Asuransi\nMobil', Colors.orange),
+            _buildMenuItem(
+                Icons.mosque, 'Pembiayaan\nPorsi Haji', Colors.green),
+            _buildMenuItem(
+                Icons.insert_chart, 'Financial\nCheck Up', Colors.blue),
+            _buildMenuItem(
+                Icons.directions_car, 'Asuransi\nMobil', Colors.orange),
             _buildMenuItem(Icons.home, 'Asuransi\nProperti', Colors.purple),
           ],
         ),
@@ -65,10 +78,12 @@ class PersonalMenuView extends StatelessWidget {
             _buildMenuItem(Icons.umbrella, 'Hobi', Colors.red),
             _buildMenuItem(Icons.shopping_bag, 'Merchandise', Colors.blue),
             _buildMenuItem(Icons.favorite, 'Gaya Hidup\nSehat', Colors.green),
-            _buildMenuItem(Icons.psychology, 'Konseling &\nRohani', Colors.purple),
-            _buildMenuItem(Icons.psychology, 'Self\nDevelopment', Colors.orange),
             _buildMenuItem(
-                Icons.account_balance_wallet, 'Perencanaan\nKeuangan', Colors.brown),
+                Icons.psychology, 'Konseling &\nRohani', Colors.purple),
+            _buildMenuItem(
+                Icons.psychology, 'Self\nDevelopment', Colors.orange),
+            _buildMenuItem(Icons.account_balance_wallet,
+                'Perencanaan\nKeuangan', Colors.brown),
             _buildMenuItem(Icons.medical_services, 'Konsultasi', Colors.blue),
             _buildMenuItem(Icons.grid_view, 'Lihat Semua', Colors.grey),
           ],

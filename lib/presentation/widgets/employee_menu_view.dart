@@ -5,19 +5,31 @@ class EmployeeMenuView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 300,
-      padding: const EdgeInsets.all(16),
-      child: GridView.count(
-        crossAxisCount: 4,
-        children: [
-          _buildMenuItem('Task', Icons.assignment, Colors.blue),
-          _buildMenuItem('Activity', Icons.work, Colors.green),
-          _buildMenuItem('Observation', Icons.remove_red_eye, Colors.orange),
-          _buildMenuItem('Report', Icons.insert_chart, Colors.purple),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(16),
+          child: Text(
+            'Employee Menu',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        ),
+        Container(
+          width: double.infinity,
+          height: 300,
+          padding: const EdgeInsets.all(16),
+          child: GridView.count(
+            crossAxisCount: 4,
+            children: [
+              _buildMenuItem('Task', Icons.assignment, Colors.blue),
+              _buildMenuItem('Activity', Icons.work, Colors.green),
+              _buildMenuItem('Observation', Icons.remove_red_eye, Colors.orange),
+              _buildMenuItem('Report', Icons.insert_chart, Colors.purple),
+            ],
+          ),
+        ),
+      ],
     );
   }
 

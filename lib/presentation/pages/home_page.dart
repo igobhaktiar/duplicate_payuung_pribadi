@@ -28,7 +28,6 @@ class HomePage extends GetView<HomeController> {
       child: SingleChildScrollView(
         child: Container(
           width: double.infinity,
-          height: Get.height - 50,
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.vertical(
