@@ -10,9 +10,6 @@ class MainPage extends GetView<BottomNavSheetController> {
   Widget build(BuildContext context) {
     return Obx(() {
       return Scaffold(
-        appBar: AppBar(
-          title: const Text('Main Page'),
-        ),
         body: Stack(
           children: [
             controller.currentScreen,

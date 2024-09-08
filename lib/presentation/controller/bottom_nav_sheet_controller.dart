@@ -1,3 +1,4 @@
+import 'package:duplicate_payuung_pribadi/presentation/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,13 +19,13 @@ class BottomNavSheetController extends GetxController {
   Widget get currentScreen {
     switch (selectedIndex) {
       case 0:
-        return Container(color: Colors.white);
+        return const HomePage();
       case 1:
         return Container(color: Colors.green);
       case 2:
         return Container(color: Colors.blue);
       default:
-        return Container(color: Colors.white);
+        return const HomePage();
     }
   }
 
